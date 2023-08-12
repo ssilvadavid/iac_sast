@@ -15,18 +15,17 @@ pipeline {
             }
         }
 
-        stage('Download Terrascan') {
+        stage('Install tfsec') {
             steps {
-                sh "curl -LO https://github.com/accurics/terrascan/releases/latest/download/terrascan-linux-amd64"
-                sh "chmod +x terrascan-linux-amd64"
-                sh "mv terrascan-linux-amd64 /usr/local/bin/terrascan"
+                sh "wget -O /usr/local/bin/tfsec https://github.com/tfsec/tfsec/releases/latest/download/tfsec-linux-amd64"
+                sh "chmod +x /usr/local/bin/tfsec"
             }
         }
 
         stage('Terrascan Scan') {
             steps {
                 dir('iac_sast') {
-                    sh "terrascan scan -f ."
+                    sh "tfsec"
                 }
             }
         }
@@ -49,5 +48,6 @@ pipeline {
         }
     }
 }
+
 
 
