@@ -1,0 +1,3 @@
+sonar.projectKey=iac
+sonar.host.url=http://localhost:9000
+sonar.token=sqp_6b8b2440cf37fea0f05931750b0332ed2906f476
