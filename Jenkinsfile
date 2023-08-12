@@ -15,7 +15,23 @@ pipeline {
             }
         }
 
-    stage('Approval for Terraform') {
+        stage('Trivy Scan') {
+            agent {
+                docker {
+                    image 'aquasec/trivy'
+                    reuseNode true
+                }
+            }
+            steps {
+                script {
+                    def imageName = "aquasec/trivy"
+                    def imageTag = "latest"  // O el tag específico si lo conoces
+                    sh "trivy image --no-progress ${imageName}:${imageTag}"
+                }
+            }
+        }
+
+        stage('Approval for Terraform') {
             steps {
                 input(message: 'Approval required before Terraform', ok: 'Proceed', submitterParameter: 'APPROVER')
             }
@@ -33,3 +49,4 @@ pipeline {
         }
     }
 }
+
