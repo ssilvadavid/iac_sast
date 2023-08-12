@@ -15,18 +15,18 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
-            agent {
-                docker {
-                    image 'aquasec/trivy'
-                    reuseNode true
-                }
-            }
+        stage('Download Terrascan') {
             steps {
-                script {
-                    def imageName = "aquasec/trivy"
-                    def imageTag = "latest"  // O el tag específico si lo conoces
-                    sh "trivy image --no-progress ${imageName}:${imageTag}"
+                sh "curl -LO https://github.com/accurics/terrascan/releases/latest/download/terrascan-linux-amd64"
+                sh "chmod +x terrascan-linux-amd64"
+                sh "mv terrascan-linux-amd64 /usr/local/bin/terrascan"
+            }
+        }
+
+        stage('Terrascan Scan') {
+            steps {
+                dir('iac_sast') {
+                    sh "terrascan scan -f ."
                 }
             }
         }
@@ -49,4 +49,5 @@ pipeline {
         }
     }
 }
+
 
