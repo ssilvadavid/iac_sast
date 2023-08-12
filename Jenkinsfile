@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Terrascan Scan') {
+        stage('Tfsec Scan') {
             steps {
                 dir('iac_sast') {
                     sh "/var/jenkins_home/tfsec"
